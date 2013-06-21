@@ -1,0 +1,136 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/tmpl/template.xhtml">
+	<ui:define name="contentInsert">
+		<h:form id="manageForm">
+			<h2>RefImpl Service Manager</h2>
+			Create new Service: Please note, only max. last #{serviceControl.maxNumberOfServices} Services will be displayed for the demo purpose.
+			<br/>
+			<br/>
+			<b>NOTE: </b>Keep duration or duration unit empty, if you want to create non recurrent service (one time charge Event). Otherwise input a
+			valid duration and select the appropriate duration unit to create a recurrent service.
+			<br/>
+			<br/>
+			(*) Mandatory fields
+			<br/>
+			<br/>
+			<h:messages style="color: red;"/>
+			<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain">
+				<label class="ui-input-text" for="name">Name *:</label>
+				<h:inputText class="ui-input-text ui-body-c ui-corner-all ui-shadow-inset ui-mini"
+						type="text" name="name" placeholder="Name" 
+						validatorMessage="Name has invalid value, allowed: lenght 1-20; numbers, characters and spaces"
+						value="#{serviceControl.currentService.name}">
+					<c:if test="#{param['manageForm:btnSave'] != null}">
+						<f:validateLength minimum="1" maximum="20"/>
+						<f:validateRegex pattern="[0-9a-zA-Z]*"/>
+					</c:if>
+				</h:inputText>
+			</div>
+			<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain">
+				<label class="ui-input-text" for="payment">Payment Info *:</label>
+				<h:inputText class="ui-input-text ui-body-c ui-corner-all ui-shadow-inset ui-mini"
+						type="text" name="payment" placeholder="Payment Info" 
+						validatorMessage="Payment Info has invalid value, allowed: lenght 1-56; numbers, characters and spaces"
+						value="#{serviceControl.currentService.paymentInfo}">
+					<c:if test="#{param['manageForm:btnSave'] != null}">
+						<f:validateLength minimum="1" maximum="56"/>
+						<f:validateRegex pattern="[0-9a-zA-Z -]*"/>
+					</c:if>
+				</h:inputText>
+			</div>
+			<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain">
+				<label class="ui-input-text" for="title">Title *:</label>
+                 <h:inputText 
+                  	class="ui-input-text ui-body-c ui-corner-all ui-shadow-inset ui-mini"
+					id="title"
+					type="text" name="title" placeholder="Title" required="true"
+					value="#{serviceControl.currentService.title}">
+				</h:inputText>
+			</div>
+			<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain">
+				<label class="ui-input-text" for="abstract">Abstract *:</label>
+                 <h:inputText 
+                  	class="ui-input-text ui-body-c ui-corner-all ui-shadow-inset ui-mini"
+					id="abstract"
+					type="text" name="abstract" placeholder="Abstract"  required="true"
+					value="#{serviceControl.currentService.aabstract}">
+					<c:if test="#{param['manageForm:btnSave'] != null}">
+						<f:validateLength minimum="1" maximum="500"/>
+					</c:if>
+				</h:inputText>
+			</div>
+			<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain">
+				<label class="ui-input-text" for="amount">Amount in CHF *:</label>
+                 <h:inputText 
+                  	class="ui-input-text ui-body-c ui-corner-all ui-shadow-inset ui-mini"
+					id="amount"
+					type="text" name="amount" placeholder="Amount in CHF" 
+					validatorMessage="Amount has invalid value, allowed: decimals with '.' as decimal separator."
+					value="#{serviceControl.currentService.amount}">
+					<c:if test="#{!empty param['manageForm:btnSave']}">
+						<f:validateRegex pattern="[0-9]*\.{0,1}[0-9]*"/>
+					</c:if>
+				</h:inputText>
+			</div>
+			<div id="duration" name="durationDiv" class="ui-field-contain ui-body ui-br" data-role="fieldcontain">
+				<label class="ui-input-text" for="selectD">Duration:</label>
+				<h:inputText 
+                  	class="ui-input-text ui-body-c ui-corner-all ui-shadow-inset ui-mini"
+					id="duration"
+					type="text" name="duration" placeholder="Duration" 
+					validatorMessage="Duration has invalid value, allowed: number min 1 max 12"
+					value="#{serviceControl.currentService.duration}">
+					<c:if test="#{!empty param['manageForm:btnSave']}">
+						<f:validateDoubleRange minimum="1" maximum="12" />
+					</c:if>
+				</h:inputText>
+			</div>
+			<div id="durationUnit" name="durationDiv" class="ui-field-contain ui-body ui-br" data-role="fieldcontain">
+				<label class="ui-input-text" for="selectD">Duration Unit:</label>
+				<h:selectOneMenu
+					value="#{serviceControl.currentService.durationUnit}"
+					name="durationUnit">
+					<!-- 
+					!!! NOTE: The selected Items MUST match the enum in Service.DurationUnit 
+					-->
+                    <f:selectItem itemLabel="" itemValue="EVENT" />
+                    <f:selectItem itemLabel="Weekly" itemValue="WEEK" />
+					<f:selectItem itemLabel="Monthly" itemValue="MONTH" />
+					<f:selectItem itemLabel="Daily" itemValue="DAY" />
+				</h:selectOneMenu>
+			</div>
+			<h:commandLink
+					class="ui-btn ui-shadow ui-btn-corner-all ui-btn-icon-right ui-btn-up-c"
+					data-icon="check" data-role="button"
+					data-corners="true" data-shadow="true" data-iconshadow="true"
+					data-wrapperels="span" data-iconpos="right" value=""
+					id="btnSave" action="#{serviceControl.saveService}" >
+				<span class="ui-btn-inner ui-btn-corner-all"> <span
+					class="ui-btn-text">Save</span> <span
+					class="ui-icon ui-icon-check ui-icon-shadow"></span>
+				</span>
+			</h:commandLink>
+		</h:form>
+		<h:form>
+			<h2>Current Services</h2>
+			<div class="content-primary">
+				<ul data-role="listview" data-split-icon="delete"  data-split-theme="d">
+					<ui:repeat value="#{serviceControl.services}" var="service"
+						varStatus="status">
+						<li><a href="#">
+							<img src="#{userManager.img(service.name)}" />
+							<h3>#{service.title}</h3>
+							<p>#{service.amount} CHF, #{login.buildHumanReadableDuration(service)}</p>
+							</a>
+							<h:commandLink action="#{serviceControl.deleteServiceByExtId(service.extId)}">Delete</h:commandLink>
+						</li>
+					</ui:repeat>
+				</ul>
+			</div>
+			</h:form>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,45 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:of="http://omnifaces.org/functions" >
+	<c:set var="_operation" value="param['operation']"/>
+	<c:set var="_username" value="param['username']"/>
+	<c:set var="_password" value="param['password']"/>
+	
+	<h:form>
+		<label class="ui-input-text" for="mini">Username:</label>
+		<h:messages globalOnly="false"/>
+		<h:inputText
+			class="ui-input-text ui-body-c ui-corner-all ui-shadow-inset ui-mini"
+			type="text" name="name" placeholder="Username" 
+			value="#{login.username}"
+			validatorMessage="Login failed: Invalid Username">
+			<f:validateRegex pattern="[a-z0-9]*"/>
+		</h:inputText>
+		<label class="ui-input-text" for="mini">Password:</label>
+		<h:inputSecret
+			class="ui-input-text ui-body-c ui-corner-all ui-shadow-inset ui-mini"
+			type="text" name="name" placeholder="Password" 
+			value="#{login.password}" 
+			validatorMessage="Login failed: Invalid Username/Password">
+		</h:inputSecret>
+		<h:commandButton
+			class="ui-btn ui-shadow ui-btn-corner-all ui-btn-icon-right ui-btn-up-c"
+			data-icon="arrow-r" data-role="button"
+			data-corners="true" data-shadow="true" data-iconshadow="true"
+			data-wrapperels="span" data-iconpos="right" value="Register"
+			action="#{login.register()}">
+		</h:commandButton>
+		<h:commandButton
+			class="ui-btn ui-shadow ui-btn-corner-all ui-btn-icon-right ui-btn-up-c"
+			data-icon="arrow-r" data-role="button"
+			data-corners="true" data-shadow="true" data-iconshadow="true"
+			data-wrapperels="span" data-iconpos="right" value="Delete"
+			action="#{login.delete()}">
+		</h:commandButton>
+	</h:form>
+</ui:composition>

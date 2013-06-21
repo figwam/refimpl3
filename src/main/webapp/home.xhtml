@@ -1,0 +1,52 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:of="http://omnifaces.org/functions" 
+	template="/tmpl/template.xhtml">
+	<ui:define name="contentInsert">
+		<h:form>
+			<h2>Welcome #{login.currentUser.username}!</h2>
+			This part of Reference Implementation (RefImpl) simulates a content partner web shop based on
+			Swisscom Easypay (MIB3.0) The Services are managed on content partner side. <!-- You can manage
+			and create new Services for RefImpl3 <a href="manage.jsf">here</a> for demo purpose. -->
+			<br/>
+			<br/>
+			<span><font color="#{userManager.purchaseStatusColor}">#{userManager.finalizePurchase()}</font></span>
+			<br/>
+			<br/>
+			<br/>
+			<div class="content-primary">
+				<ul data-role="listview">
+					<li>
+						<h:link styleClass="ui-link-inherit"
+									outcome="myServices" >
+								<img src="img/file.png" />
+								<h3>My Service Subscriptions</h3>
+								<p>List of all your subscribed services</p>			
+						</h:link>
+					</li>
+					<li>
+						<h:link styleClass="ui-link-inherit"
+									outcome="myEvents" >
+								<img src="img/file.png" />
+								<h3>My Purchased Events</h3>
+								<p>List of all your purchased events</p>			
+						</h:link>
+					</li>
+					<li>
+						<h:link styleClass="ui-link-inherit"
+									outcome="services" >
+								<img src="img/file_new.png" />
+								<h3>Offered Services</h3>
+								<p>Subscribe for new services here</p>			
+						</h:link>
+					</li>
+				</ul>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

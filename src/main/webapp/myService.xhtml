@@ -1,0 +1,40 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:of="http://omnifaces.org/functions"
+	template="/tmpl/template.xhtml">
+	<ui:define name="contentInsert">
+		<c:set var="_isServiceSet" value="#{login.updateUserSelectedServiceSubs(param['easypayAuthId'])}"/>
+		<h:form>
+			<h:messages errorClass="errorMessage" infoClass="infoMessage" warnClass="warnMessage"/>
+			<c:if test="#{_isServiceSet != null}">
+				<c:set var="_service" value="#{login.currentUser.selectedService}"/>
+				<img src="#{userManager.img(_service.name)}" />
+				<p>Payment Info: #{_service.paymentInfo}</p>
+				<p>Amount: CHF #{_service.amount}</p>
+				<p>Recurrence: #{_service.humanReadableDuration}</p>
+				<p>Purchased on: #{facesUtil.formatDate(_service.createdOn)}</p>
+				<p>Status: #{_service.status}</p>
+				<c:if test="#{_service.status eq 'CANCELLED'}">
+					<p>Cancelled on: #{facesUtil.formatDate(_service.cancelledOn)}</p>
+					<p>Valid till: #{facesUtil.formatDate(_service.validTill)}</p>
+				</c:if>
+				<c:if test="#{_service.status ne 'CANCELLED'}">
+				<p>Next payment: #{facesUtil.formatDate(_service.nextPayment)}</p>
+					<h:commandButton
+						class="ui-btn ui-shadow ui-btn-corner-all ui-btn-icon-right ui-btn-up-c"
+						value="Cancel" action="#{userManager.cancel(_service.extId,_service.easypayAuthId)}">
+					</h:commandButton>
+				</c:if>
+				<h:commandButton
+					class="ui-btn ui-shadow ui-btn-corner-all ui-btn-icon-right ui-btn-up-c"
+					value="Delete" action="#{userManager.delete(_service.extId,_service.easypayAuthId)}">
+				</h:commandButton>
+			</c:if>
+		</h:form>
+	</ui:define>
+</ui:composition>

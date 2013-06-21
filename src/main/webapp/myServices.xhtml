@@ -1,0 +1,31 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/tmpl/template.xhtml">
+	<ui:define name="contentInsert">
+		<c:if test="#{empty login.currentUser.services}">
+			<p>You don't have any Subscription yet.</p>
+		</c:if>
+		<c:if test="#{not empty login.currentUser.services}">
+			<div class="content-primary">
+				<h:messages errorClass="errorMessage" infoClass="infoMessage" warnClass="warnMessage"/>
+				<ul data-role="listview">
+					<ui:repeat value="#{login.currentUser.services}" var="service"
+						varStatus="stat">
+						<li>
+							<h:link outcome="myService">
+								<img src="#{userManager.img(service.name)}" />
+								<h3>#{service.title}</h3>
+								<p>#{service.amount} CHF, #{service.humanReadableDuration}, #{service.status}</p>
+								<f:param name="serviceId" value="#{service.extId}" />
+								<f:param name="easypayAuthId" value="#{service.easypayAuthId}" />
+							</h:link>
+						</li>
+					</ui:repeat>
+				</ul>
+			</div>
+		</c:if>
+	</ui:define>
+</ui:composition>
